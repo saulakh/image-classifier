@@ -30,7 +30,7 @@ def predict(image_path, model, K, class_names):
     probs = values.numpy()
     labels = idx.numpy()
     
-    # Get flower from file name, for plot title
+    # Get flower from file name
     title = ntpath.basename(image_path)
     
     # Print top K labels and probabilities
@@ -48,16 +48,16 @@ def predict(image_path, model, K, class_names):
 parser = argparse.ArgumentParser()
 parser.add_argument('image_path')
 parser.add_argument('model_path')
-parser.add_argument('--K', type=int, default=3)
-parser.add_argument('--class_names', default='label_map.json')
+parser.add_argument('--top_k', type=int, default=3)
+parser.add_argument('--category_names', default='label_map.json')
 args = parser.parse_args()
 
 # Load the Keras model
 model = tf.keras.models.load_model(args.model_path,custom_objects={'KerasLayer':hub.KerasLayer})
 
 # Load class names
-with open(args.class_names, 'r') as f:
+with open(args.category_names, 'r') as f:
     class_names = json.load(f)
 
 # Predict top K class names
-predict(args.image_path, model, args.K, class_names)
+predict(args.image_path, model, args.top_k, class_names)
